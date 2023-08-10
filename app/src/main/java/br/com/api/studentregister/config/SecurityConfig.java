@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 //Basicamente security trabalha com dois critérios:
 //Autenticação e Autorização
@@ -26,12 +27,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe
 
     @Override //Aqui é configurado o que é protegido através do protocolo HTTP
     protected void configure(HttpSecurity http) throws Exception {
-        //Isso significa que qualquer requisição tem que ser autenticada
-        http.authorizeRequests()
+        //Para criar um token e desabilitar o cross-origin:
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //Para as aplicações conseguirem pegar o valor do cookie
+                .and()
+                .authorizeRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic(); //Forma de autenticação
+                .httpBasic();
+
+
+//        //Isso significa que qualquer requisição tem que ser autenticada
+//        http.authorizeRequests()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .httpBasic(); //Forma de autenticação
 
 
     }
