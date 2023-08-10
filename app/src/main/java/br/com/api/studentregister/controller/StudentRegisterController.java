@@ -8,6 +8,7 @@ import br.com.api.studentregister.service.StudentRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,7 @@ public class StudentRegisterController {
 
     @PostMapping
     @Transactional
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentRegisterResponseDto> registerStudent(@Valid @RequestBody StudentRegisterRequestDto studentRegisterRequestDto) {
         StudentRegisterResponseDto responseDto = service.registerStudent(studentRegisterRequestDto);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);

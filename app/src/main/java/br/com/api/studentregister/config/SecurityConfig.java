@@ -11,6 +11,7 @@ package br.com.api.studentregister.config;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 //Autenticação e Autorização
 @EnableWebSecurity // é uma configuração e um bean
 @Log4j2
+@EnableGlobalMethodSecurity(prePostEnabled = true) //Serve para habilitar a anotação @PreAuthorize
 public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe pode ter qualquer nome (É indiferente)
 
 
