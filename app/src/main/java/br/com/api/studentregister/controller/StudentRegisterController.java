@@ -5,10 +5,13 @@ import br.com.api.studentregister.model.dto.request.StudentRegisterRequestDto;
 import br.com.api.studentregister.model.dto.request.StudentRegisterUpdateRequestDto;
 import br.com.api.studentregister.model.dto.response.StudentRegisterResponseDto;
 import br.com.api.studentregister.service.StudentRegisterService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import java.util.List;
 
 @RestController
 @Validated
+@Log4j2
 @RequestMapping(path = "/students")
 public class StudentRegisterController {
 
@@ -45,6 +49,15 @@ public class StudentRegisterController {
     public ResponseEntity<StudentRegisterModel> getStudentRegisterByCpf(@PathVariable String cpf) {
         return ResponseEntity.ok(service.getStudentRegisteredInTheSystemByCpf(cpf));
 
+    }
+
+    //serve para pegar os dados dos usuários autenticados
+    //Dentre isso, o seu nível de autenticação e autorização
+    @GetMapping(path = "by-cpf/{cpf}")
+    public ResponseEntity<StudentRegisterModel> getStudentRegisterByCpfAuthenticationPrincipal(@PathVariable String cpf,
+                                                                                               @AuthenticationPrincipal UserDetails userDetails) {
+        log.info(userDetails);
+        return ResponseEntity.ok(service.getStudentRegisteredInTheSystemByCpf(cpf));
     }
 
     @GetMapping(path = "/reduced")

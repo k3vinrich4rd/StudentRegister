@@ -34,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe
                 .anyRequest()
                 .authenticated()
                 .and()
+                .formLogin()//para autenticar via um formulário de front
+                .and()
                 .httpBasic();  //Forma de autenticação
     }
 
