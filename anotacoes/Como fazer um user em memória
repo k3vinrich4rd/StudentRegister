@@ -1,0 +1,15 @@
+    @Override //Configura o gerenciador de autenticação
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //Para decodificar uma senha
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        log.info("Password encoded {}", passwordEncoder.encode("test"));
+        auth.inMemoryAuthentication()
+                .withUser("kevin")
+                .password(passwordEncoder.encode("root"))
+                .roles("ADMIN", "USER")
+                .and()
+                .withUser("rafa")
+                .password(passwordEncoder.encode("user"))
+                .roles("USER");
+
+    }
