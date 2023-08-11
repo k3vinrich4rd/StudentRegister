@@ -9,6 +9,8 @@ package br.com.api.studentregister.config;
 //DefaultLoginFilter
 //Filter Security Interceptor
 
+import br.com.api.studentregister.service.StudentRegisterUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -23,8 +25,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity // é uma configuração e um bean
 @Log4j2
 @EnableGlobalMethodSecurity(prePostEnabled = true) //Serve para habilitar a anotação @PreAuthorize
+@RequiredArgsConstructor
+@SuppressWarnings("java:S5344")
 public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe pode ter qualquer nome (É indiferente)
 
+    private final StudentRegisterUserDetailsService studentRegisterUserDetailsService;
 
     @Override //Aqui é configurado o que é protegido através do protocolo HTTP
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,15 +48,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //Para decodificar uma senha
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        log.info("Password encoded {}", passwordEncoder.encode("test"));
+        log.info("Password encoded {}", passwordEncoder.encode("root"));
+
+        //Usuário em memória
         auth.inMemoryAuthentication()
-                .withUser("kevin")
+                .withUser("kevin2")
                 .password(passwordEncoder.encode("root"))
                 .roles("ADMIN", "USER")
                 .and()
-                .withUser("rafa")
-                .password(passwordEncoder.encode("user"))
+                .withUser("rafael2")
+                .password(passwordEncoder.encode("root"))
                 .roles("USER");
+
+        //Usuário no banco de dados
+        auth.userDetailsService(studentRegisterUserDetailsService).passwordEncoder(passwordEncoder);
+
 
     }
 }

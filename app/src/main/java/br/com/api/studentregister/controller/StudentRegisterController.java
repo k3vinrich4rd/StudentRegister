@@ -54,6 +54,7 @@ public class StudentRegisterController {
     //serve para pegar os dados dos usuários autenticados
     //Dentre isso, o seu nível de autenticação e autorização
     @GetMapping(path = "by-cpf/{cpf}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentRegisterModel> getStudentRegisterByCpfAuthenticationPrincipal(@PathVariable String cpf,
                                                                                                @AuthenticationPrincipal UserDetails userDetails) {
         log.info(userDetails);

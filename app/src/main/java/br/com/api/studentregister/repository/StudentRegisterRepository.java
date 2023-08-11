@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface IStudentRegisterRepository extends JpaRepository<StudentRegisterModel, UUID> {
+public interface StudentRegisterRepository extends JpaRepository<StudentRegisterModel, UUID> {
 
     @Query(value = "select * from student_register where status_registration_enum in ('ACTIVE') ", nativeQuery = true)
     List<StudentRegisterModel> searchStudentsWithRegistrationStatusActive();

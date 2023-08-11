@@ -9,10 +9,9 @@ import br.com.api.studentregister.model.StudentRegisterModel;
 import br.com.api.studentregister.model.dto.request.StudentRegisterRequestDto;
 import br.com.api.studentregister.model.dto.request.StudentRegisterUpdateRequestDto;
 import br.com.api.studentregister.model.dto.response.StudentRegisterResponseDto;
-import br.com.api.studentregister.repository.IStudentRegisterRepository;
+import br.com.api.studentregister.repository.StudentRegisterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -20,29 +19,29 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentRegisterService {
-    private final IStudentRegisterRepository iStudentRegisterRepository;
+    private final StudentRegisterRepository studentRegisterRepository;
 
     @Autowired
-    public StudentRegisterService(IStudentRegisterRepository iStudentRegisterRepository) {
-        this.iStudentRegisterRepository = iStudentRegisterRepository;
+    public StudentRegisterService(StudentRegisterRepository studentRegisterRepository) {
+        this.studentRegisterRepository = studentRegisterRepository;
     }
 
     public StudentRegisterResponseDto registerStudent(StudentRegisterRequestDto studentRegisterRequestDto) {
         StudentRegisterModel studentRegisterModel = studentRegisterRequestDto.convertStudentRegisterToRequestDto();
         studentRegisterModel.setStatusRegistrationEnum(StatusRegistrationEnum.ACTIVE);
 
-        StudentRegisterModel registerModel = iStudentRegisterRepository.save(studentRegisterModel);
+        StudentRegisterModel registerModel = studentRegisterRepository.save(studentRegisterModel);
         return StudentRegisterResponseDto.convertStudentRegisterToResponseDto(registerModel);
     }
 
     public List<StudentRegisterModel> searchStudentRegister() {
-        return iStudentRegisterRepository.searchStudentsWithRegistrationStatusActive();
+        return studentRegisterRepository.searchStudentsWithRegistrationStatusActive();
     }
 
     //Cenário de uso: Estudante passa mal
     //Funcionário da escola que não tem autorização para acessar os registro de todos estudantes
     public StudentRegisterModel getStudentRegisteredInTheSystemByCpf(String cpf) {
-        Optional<StudentRegisterModel> studentRegisterOptional = iStudentRegisterRepository.findByCpf(cpf);
+        Optional<StudentRegisterModel> studentRegisterOptional = studentRegisterRepository.findByCpf(cpf);
         if (studentRegisterOptional.isEmpty()) {
             throw new ObjectNotFoundException();
         }
@@ -57,7 +56,7 @@ public class StudentRegisterService {
 
     public List<StudentRegisterResponseDto> getStudentUsingDto() {
         List<StudentRegisterModel> studentRegisterModelList =
-                iStudentRegisterRepository.searchStudentsWithRegistrationStatusActive();
+                studentRegisterRepository.searchStudentsWithRegistrationStatusActive();
         return studentRegisterModelList
                 .stream()
                 .map(StudentRegisterResponseDto::new)
@@ -65,7 +64,7 @@ public class StudentRegisterService {
     }
 
     public void inactiveStudentRegister(String cpf) {
-        Optional<StudentRegisterModel> studentRegisterModelOptional = iStudentRegisterRepository.findByCpf(cpf);
+        Optional<StudentRegisterModel> studentRegisterModelOptional = studentRegisterRepository.findByCpf(cpf);
         if (studentRegisterModelOptional.isEmpty()) {
             throw new ObjectNotFoundException();
         }
@@ -73,7 +72,7 @@ public class StudentRegisterService {
         StudentRegisterModel studentRegisterModel = studentRegisterModelOptional.get();
         if (studentRegisterModel.getStatusRegistrationEnum().equals(StatusRegistrationEnum.ACTIVE)) {
             studentRegisterModel.setStatusRegistrationEnum(StatusRegistrationEnum.INACTIVE);
-            iStudentRegisterRepository.save(studentRegisterModel);
+            studentRegisterRepository.save(studentRegisterModel);
             return;
         }
         throw new ObjectNotFoundException();
@@ -90,12 +89,12 @@ public class StudentRegisterService {
         studentRegistered.setCellPhone(updateRequestDto.getCellPhone());
         studentRegistered.setContactEmergency(updateRequestDto.getContactEmergency());
         studentRegistered.setStatusRegistrationEnum(updateRequestDto.getStatusRegistrationEnum());
-        StudentRegisterModel studentRegisterModel = iStudentRegisterRepository.save(studentRegistered);
+        StudentRegisterModel studentRegisterModel = studentRegisterRepository.save(studentRegistered);
         return StudentRegisterResponseDto.convertStudentRegisterToResponseDto(studentRegisterModel);
 
     }
 
     public List<StudentRegisterModel> searchStudentRegisterInactive() {
-        return iStudentRegisterRepository.searchStudentsWithRegistrationStatusInactive();
+        return studentRegisterRepository.searchStudentsWithRegistrationStatusInactive();
     }
 }
