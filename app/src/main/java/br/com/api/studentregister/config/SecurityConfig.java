@@ -36,6 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { //Essa classe
         http.csrf().disable()
                 //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) //Para as aplicações conseguirem pegar o valor do cookie
                 .authorizeRequests() //Isso significa que qualquer requisição tem que ser autenticada
+                //O mais restritivo tem que vir primeiro:
+//                .antMatchers("/students/admin/**").hasRole("ADMIN")
+//                .antMatchers("/students/**").hasRole("USER") //Substitui o pré autorize
                 .anyRequest()
                 .authenticated()
                 .and()
