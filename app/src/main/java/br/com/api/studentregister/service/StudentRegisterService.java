@@ -11,6 +11,8 @@ import br.com.api.studentregister.model.dto.request.StudentRegisterUpdateRequest
 import br.com.api.studentregister.model.dto.response.StudentRegisterResponseDto;
 import br.com.api.studentregister.repository.StudentRegisterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,10 @@ public class StudentRegisterService {
 
     public List<StudentRegisterModel> searchStudentRegister() {
         return studentRegisterRepository.searchStudentsWithRegistrationStatusActive();
+    }
+
+    public Page<StudentRegisterModel> searchStudentRegisterPageable(Pageable pageable) {
+        return studentRegisterRepository.searchStudentsWithRegistrationStatusActivePageable(pageable);
     }
 
     //Cenário de uso: Estudante passa mal

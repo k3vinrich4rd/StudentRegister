@@ -2,6 +2,8 @@ package br.com.api.studentregister.repository;
 
 
 import br.com.api.studentregister.model.StudentRegisterModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +22,7 @@ public interface StudentRegisterRepository extends JpaRepository<StudentRegister
     List<StudentRegisterModel> searchStudentsWithRegistrationStatusInactive();
 
     Optional<StudentRegisterModel> findByCpf(String cpf);
+
+    @Query(value = "select * from student_register where status_registration_enum in ('ACTIVE') ", nativeQuery = true)
+    Page<StudentRegisterModel> searchStudentsWithRegistrationStatusActivePageable(Pageable pageable);
 }

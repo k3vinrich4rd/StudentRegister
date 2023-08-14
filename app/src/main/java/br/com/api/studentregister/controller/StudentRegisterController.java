@@ -7,6 +7,9 @@ import br.com.api.studentregister.model.dto.response.StudentRegisterResponseDto;
 import br.com.api.studentregister.service.StudentRegisterService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,6 +46,11 @@ public class StudentRegisterController {
     @GetMapping(path = "/active")
     public ResponseEntity<List<StudentRegisterModel>> searchStudentRegister() {
         return ResponseEntity.ok(service.searchStudentRegister());
+    }
+
+    @GetMapping(path = "pageable/active") //Inserindo paginação
+    public ResponseEntity<Page<StudentRegisterModel>> searchStudentRegister(@PageableDefault(size = 1, sort = {"name_student"}, page = 0) Pageable pageable) {
+        return ResponseEntity.ok(service.searchStudentRegisterPageable(pageable));
     }
 
     @GetMapping(path = "/{cpf}")
