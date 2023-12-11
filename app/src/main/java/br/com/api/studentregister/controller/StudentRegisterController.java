@@ -63,7 +63,7 @@ public class StudentRegisterController {
     //Dentre isso, o seu nível de autenticação e autorização
     @GetMapping(path = "by-cpf/{cpf}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StudentRegisterModel> getStudentRegisterByCpfAuthenticationPrincipal(@PathVariable String cpf,
+    public ResponseEntity<StudentRegisterModel> getStudentRegisterByCpfAuthenticationPrincipal(@PathVariable("cpf") String cpf,
                                                                                                @AuthenticationPrincipal UserDetails userDetails) {
         log.info(userDetails);
         return ResponseEntity.ok(service.getStudentRegisteredInTheSystemByCpf(cpf));
