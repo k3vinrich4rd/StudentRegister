@@ -13,7 +13,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-@Entity
 @Table(name = "student_register")
 public class StudentRegisterModel implements Serializable {
 
